@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30717.126
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "VR Maze", "VR Maze\VR Maze.vbproj", "{194787DE-7B89-4D6F-8CF5-E8C660705560}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4B4B07CF-64D4-4203-A8EE-6F3E80E4DE01}"
+	ProjectSection(SolutionItems) = preProject
+		generateMaze.js = generateMaze.js
+		html_page.html = html_page.html
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{194787DE-7B89-4D6F-8CF5-E8C660705560}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{194787DE-7B89-4D6F-8CF5-E8C660705560}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{194787DE-7B89-4D6F-8CF5-E8C660705560}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{194787DE-7B89-4D6F-8CF5-E8C660705560}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {A30FD69B-75C2-4291-B3C9-A21774FB4E11}
+	EndGlobalSection
+EndGlobal
