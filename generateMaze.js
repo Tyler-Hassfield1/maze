@@ -9,7 +9,7 @@ function randomInteger(min, max) {
 
 //Computes the surrounding frontier cells of given cell
 function computeFrontier(maze, cell_row, cell_col) {
-    debugger;
+    
     //Check cell above
     if ((cell_row - 2) >= 0 && maze[cell_row - 2][cell_col] == false) {
         frontierList.push({ x: (cell_row - 2), y: (cell_col) });
@@ -17,7 +17,7 @@ function computeFrontier(maze, cell_row, cell_col) {
     }
     
     //Check cell below
-    if ((cell_row + 2) <= maze.length && (maze[cell_row + 2][cell_col]) == false) {
+    if ((cell_row + 2) <= maze.length - 1 && (maze[cell_row + 2][cell_col]) == false) {
         frontierList.push({ x: (cell_row + 2), y: (cell_col) });
         maze[cell_row + 2][cell_col] = true;
     }
@@ -45,7 +45,7 @@ function computeNeighbor(maze, cell_row, cell_col) {
     }
 
     //Check cell below
-    if ((cell_row + 2) <= maze.length && (maze[cell_row + 2][cell_col]) == true) {
+    if ((cell_row + 2) <= maze.length - 1 && (maze[cell_row + 2][cell_col]) == true) {
         neighbors.push({ x: (cell_row + 2), y: (cell_col) });
     }
 
@@ -62,8 +62,23 @@ function computeNeighbor(maze, cell_row, cell_col) {
 
 
 //Connects the pathway between current frontier cell and chosen neighbor
-function connect_path(maze, cell_row, cell_col) {
+function connect_path(maze, cell_row, cell_col, cell_row2, cell_col2) {
 
+    if (cell_row == cell_row2) {
+        if (cell_col2 > cell_col) {
+            maze[cell_row][cell_col + 1] = true;
+        } else {
+            maze[cell_row][cell_col - 1] = true;
+        }
+    } else if (cell_col == cell_col2) {
+        if (cell_row2 > cell_row) {
+            maze[cell_row + 1][cell_col] = true;
+        } else {
+            maze[cell_row - 1][cell_col] = true;
+        }
+    }
+
+    /**
     //Check cell above
     if ((cell_row - 2) >= 0 && maze[cell_row - 2][cell_col] == true) {
         maze[cell_row - 1][cell_col] = true;
@@ -74,6 +89,7 @@ function connect_path(maze, cell_row, cell_col) {
     } else if ((cell_col + 2) <= maze.length && maze[cell_row][cell_col + 2] == true) {
         maze[cell_row][cell_col + 1] = true;
     }
+    */
 }
 
 
@@ -114,19 +130,25 @@ function GenerateMaze(size_row, size_col) {
     var rand_neighbor;
     var neighbor_row;
     var neighbor_col;
-
+   
     //Loop through frontier list
-    while (frontierList.length) {
+    while (frontierList.length > 0) {
+        neighbors = [];
+
         rand_index = randomInteger(0, frontierList.length - 1);
         computeNeighbor(maze, frontierList[rand_index].x, frontierList[rand_index].y);
 
-        rand_neighbor = randomInteger(0, neighbors.length);
-        connect_path(maze, neighbors[rand_neighbor].x, neighbors[rand_neighbor].y);
+        rand_neighbor = randomInteger(0, neighbors.length - 1);
+        connect_path(maze, frontierList[rand_index].x, frontierList[rand_index].y, neighbors[rand_neighbor].x, neighbors[rand_neighbor].y);
+
+        computeFrontier(maze, frontierList[rand_index].x, frontierList[rand_index].y);
+
+        frontierList.splice(rand_index, 1);
     }
-    
+    console.log(maze);
 }
 
-var num1 = 6;
-var num2 = 6;
+var num1 = 300;
+var num2 = 300;
 
 GenerateMaze(num1, num2);
