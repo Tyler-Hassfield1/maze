@@ -78,18 +78,6 @@ function connect_path(maze, cell_row, cell_col, cell_row2, cell_col2) {
         }
     }
 
-    /**
-    //Check cell above
-    if ((cell_row - 2) >= 0 && maze[cell_row - 2][cell_col] == true) {
-        maze[cell_row - 1][cell_col] = true;
-    } else if ((cell_row + 2) <= maze.length && (maze[cell_row + 2][cell_col]) == true) {
-        maze[cell_row + 1][cell_col] = true;
-    } else if ((cell_col - 2) >= 0 && maze[cell_row][cell_col - 2] == true) {
-        maze[cell_row][cell_col - 1] = true;
-    } else if ((cell_col + 2) <= maze.length && maze[cell_row][cell_col + 2] == true) {
-        maze[cell_row][cell_col + 1] = true;
-    }
-    */
 }
 
 
