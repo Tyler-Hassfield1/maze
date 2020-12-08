@@ -140,7 +140,7 @@ function init() {
 
 
 	// floor
-	geometry = new THREE.PlaneGeometry(2000, 2000, 100, 100);
+	geometry = new THREE.PlaneGeometry(20000, 20000, 500, 500);
 	geometry.rotateX(- Math.PI / 2);
 	for (var i = 0, l = geometry.vertices.length; i < l; i++) {
 		var vertex = geometry.vertices[i];
@@ -373,14 +373,24 @@ function animate() {
 		velocity.x -= velocity.x * 10.0 * delta;
 		velocity.z -= velocity.z * 10.0 * delta;
 		velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
-		if (moveForward) velocity.z -= 400.0 * delta;
-		if (moveBackward) velocity.z += 400.0 * delta;
-		if (moveLeft) velocity.x -= 400.0 * delta;
-		if (moveRight) velocity.x += 400.0 * delta;
+
+		if (moveForward) {
+			velocity.z -= 400.0 * delta;
+		}
+		if (moveBackward) {
+			velocity.z += 400.0 * delta;
+		}
+		if (moveLeft) {
+			velocity.x -= 400.0 * delta;
+		}
+		if (moveRight) {
+			velocity.x += 400.0 * delta;
+		}
 		if (isOnObject === true) {
 			velocity.y = Math.max(0, velocity.y);
 			canJump = true;
 		}
+
 		controls.getObject().translateX(velocity.x * delta);
 		controls.getObject().translateY(velocity.y * delta);
 		controls.getObject().translateZ(velocity.z * delta);
