@@ -311,9 +311,9 @@ function init() {
 		return maze;
 	}
 
-	var num1 = 10;
-	var num2 = 10;
-
+	var num1 = 100;
+	var num2 = 100;
+	
 	var mazeArray = GenerateMaze(num1, num2);
 
 	//END OF generateMaze.js
