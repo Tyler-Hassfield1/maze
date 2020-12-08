@@ -148,7 +148,7 @@ function GenerateMaze(size_row, size_col) {
     console.log(maze);
 }
 
-var num1 = 300;
-var num2 = 300;
+var num1 = 10;
+var num2 = 10;
 
 GenerateMaze(num1, num2);
