@@ -182,7 +182,6 @@ function init() {
     }
 
 
-
 	//Computes the surrounding frontier cells of given cell
 	function computeFrontier(maze, cell_row, cell_col) {
 
@@ -318,11 +317,36 @@ function init() {
 			frontierList.splice(rand_index, 1);
 		}
 
+		//Loop through maze array to set all outer facing rows and columns are walls
+		for (var i = 0; i < maze.length; i++) {
+			maze[0][i] = false;
+			maze[i][0] = false;
+			maze[maze.length - 1][i] = false;
+			maze[i][maze.length - 1] = false;
+		}
+
+		//Set entrance 
+		for (var i = 1; i < maze.length; i++) {
+			if (maze[1][i] == true) {
+				maze[0][i] = true;
+				break;
+			}
+		}
+
+		//Set exit
+		for (var i = maze.length - 1; i > 0; i--) {
+			if (maze[maze.length - 2][i] == true) {
+				maze[maze.length - 1][i] = true;
+				break;
+			}
+		}
+
+
 		return maze;
 	}
 
-	var num1 = 50;
-	var num2 = 50;
+	var num1 = 20;
+	var num2 = 20;
 	
 	var mazeArray = GenerateMaze(num1, num2);
 
