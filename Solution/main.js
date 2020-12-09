@@ -187,25 +187,25 @@ function init() {
 		//Check cell above
 		if ((cell_row - 2) >= 0 && maze[cell_row - 2][cell_col] == false) {
 			frontierList.push({ x: (cell_row - 2), y: (cell_col) });
-			maze[cell_row - 2][cell_col] = true;
+			//maze[cell_row - 2][cell_col] = true;
 		}
 
 		//Check cell below
 		if ((cell_row + 2) <= maze.length - 1 && (maze[cell_row + 2][cell_col]) == false) {
 			frontierList.push({ x: (cell_row + 2), y: (cell_col) });
-			maze[cell_row + 2][cell_col] = true;
+			//maze[cell_row + 2][cell_col] = true;
 		}
 
 		//Check cell left
 		if ((cell_col - 2) >= 0 && maze[cell_row][cell_col - 2] == false) {
 			frontierList.push({ x: (cell_row), y: (cell_col - 2) });
-			maze[cell_row][cell_col - 2] = true;
+			//maze[cell_row][cell_col - 2] = true;
 		}
 
 		//Check cell right
 		if ((cell_col + 2) <= maze.length && maze[cell_row][cell_col + 2] == false) {
 			frontierList.push({ x: (cell_row), y: (cell_col + 2) });
-			maze[cell_row][cell_col + 2] = true;
+			//maze[cell_row][cell_col + 2] = true;
 		}
 	}
 
@@ -256,7 +256,7 @@ function init() {
 
 
 	function GenerateMaze(size_row, size_col) {
-
+		debugger;
 		/**
 		 * Initialize 2D boolean array maze with values false
 		 * False = blocked
@@ -302,7 +302,7 @@ function init() {
 
 			rand_neighbor = randomInteger(0, neighbors.length - 1);
 			connect_path(maze, frontierList[rand_index].x, frontierList[rand_index].y, neighbors[rand_neighbor].x, neighbors[rand_neighbor].y);
-
+			maze[frontierList[rand_index].x][frontierList[rand_index].y] = true;
 			computeFrontier(maze, frontierList[rand_index].x, frontierList[rand_index].y);
 
 			frontierList.splice(rand_index, 1);
@@ -311,8 +311,8 @@ function init() {
 		return maze;
 	}
 
-	var num1 = 100;
-	var num2 = 100;
+	var num1 = 50;
+	var num2 = 50;
 	
 	var mazeArray = GenerateMaze(num1, num2);
 

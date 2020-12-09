@@ -82,7 +82,7 @@ function connect_path(maze, cell_row, cell_col, cell_row2, cell_col2) {
 
 
 function GenerateMaze(size_row, size_col) {
-
+    
     /**
      * Initialize 2D boolean array maze with values false
      * False = blocked
