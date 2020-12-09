@@ -10,7 +10,7 @@ var instructions = document.getElementById('instructions');
 var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
 
-
+//Check if browser supports pointerlockcontrol
 if (havePointerLock) {
 	var element = document.body;
 	var pointerlockchange = function (event) {
@@ -41,6 +41,7 @@ if (havePointerLock) {
 	document.addEventListener('webkitpointerlockerror', pointerlockerror, false);
 	instructions.addEventListener('click', function (event) {
 		instructions.style.display = 'none';
+
 		// Ask the browser to lock the pointer
 		element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
 		if (/Firefox/i.test(navigator.userAgent)) {
@@ -82,14 +83,19 @@ var velocity = new THREE.Vector3();
 
 
 function init() {
+	//Create camera, scene, and light source
 	camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
 	scene = new THREE.Scene();
 	scene.fog = new THREE.Fog(0xffffff, 0, 750);
 	var light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.75);
 	light.position.set(0.5, 1, 0.75);
+
+	//Add the light and pointerlockcontrols to scene
 	scene.add(light);
 	controls = new THREE.PointerLockControls(camera);
 	scene.add(controls.getObject());
+
+	//Handle key events for movement
 	var onKeyDown = function (event) {
 		switch (event.keyCode) {
 			case 38: // up
@@ -139,21 +145,25 @@ function init() {
 
 
 
-	// floor
+	//Geometry for floor plane 
 	geometry = new THREE.PlaneGeometry(20000, 20000, 500, 500);
 	geometry.rotateX(- Math.PI / 2);
+
+	//Create pattern of floor
 	for (var i = 0, l = geometry.vertices.length; i < l; i++) {
 		var vertex = geometry.vertices[i];
 		vertex.x += Math.random() * 20 - 10;
 		vertex.y += Math.random() * 2;
 		vertex.z += Math.random() * 20 - 10;
 	}
+	//Color floor pattern 
 	for (var i = 0, l = geometry.faces.length; i < l; i++) {
 		var face = geometry.faces[i];
 		face.vertexColors[0] = new THREE.Color().setHSL(Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
 		face.vertexColors[1] = new THREE.Color().setHSL(Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
 		face.vertexColors[2] = new THREE.Color().setHSL(Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
 	}
+	//Mesh the geometry and material (Colors) together and add to scene
 	material = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors });
 	mesh = new THREE.Mesh(geometry, material);
 	scene.add(mesh);
@@ -172,7 +182,11 @@ function init() {
 
 
 
-	//Returns true if the given x,y coordinate is already in the frontierList
+	/**
+	 * Returns true if the given x,y coordinate is already in the frontierList
+	 * @param {any} ex - row in Maze array 
+	 * @param {any} why - column in Maze array
+	 */
 	function includes(ex, why) {
 		for (var i = 0; i < frontierList.length; i++) {
 			if (frontierList[i].x == ex && frontierList[i].y == why) {
@@ -182,7 +196,13 @@ function init() {
     }
 
 
-	//Computes the surrounding frontier cells of given cell
+	/**
+	 * Computes the surrounding frontier cells of given cell
+	 * Frontier cell = any cell set to false that is 2 blocks away and within array 
+	 * @param {any} maze
+	 * @param {any} cell_row
+	 * @param {any} cell_col
+	 */
 	function computeFrontier(maze, cell_row, cell_col) {
 
 		//Check cell above
@@ -190,7 +210,6 @@ function init() {
 			if (!includes((cell_row - 2), cell_col)) {
 				frontierList.push({ x: (cell_row - 2), y: (cell_col) });
             }
-			//maze[cell_row - 2][cell_col] = true;
 		}
 
 		//Check cell below
@@ -198,7 +217,6 @@ function init() {
 			if (!includes((cell_row + 2), cell_col)) {
 				frontierList.push({ x: (cell_row + 2), y: (cell_col) });
             }
-			//maze[cell_row + 2][cell_col] = true;
 		}
 
 		//Check cell left
@@ -206,7 +224,6 @@ function init() {
 			if (!includes(cell_row, (cell_col - 2))) {
 				frontierList.push({ x: (cell_row), y: (cell_col - 2) });
 			}
-			//maze[cell_row][cell_col - 2] = true;
 		}
 
 		//Check cell right
@@ -214,12 +231,17 @@ function init() {
 			if (!includes(cell_row, (cell_col + 2))) {
 				frontierList.push({ x: (cell_row), y: (cell_col + 2) });
 			}
-			//maze[cell_row][cell_col + 2] = true;
 		}
 	}
 
 
-	//Computes the surrounding neighbors of given cell
+	/**
+	 * Computes the surrounding neighbors of given cell
+	 * Neighbor = any cell set to true that is 2 blocks away wihtin array 
+	 * @param {any} maze
+	 * @param {any} cell_row
+	 * @param {any} cell_col
+	 */
 	function computeNeighbor(maze, cell_row, cell_col) {
 
 		//Check cell above
@@ -244,7 +266,14 @@ function init() {
 	}
 
 
-	//Connects the pathway between current frontier cell and chosen neighbor
+	/**
+	 * Connects the pathway between current frontier cell and chosen neighbor
+	 * @param {any} maze
+	 * @param {any} cell_row - row of origin cell 
+	 * @param {any} cell_col - column of origin cell 
+	 * @param {any} cell_row2 - row of neighbor to be connected
+	 * @param {any} cell_col2 - column of neighbor to be connected 
+	 */
 	function connect_path(maze, cell_row, cell_col, cell_row2, cell_col2) {
 
 		if (cell_row == cell_row2) {
@@ -263,15 +292,18 @@ function init() {
 
 	}
 
-
+	/**
+	 * Creates maze array and carries out prims randomized algorithm to generate maze
+	 * @param {any} size_row - Number of rows in maze
+	 * @param {any} size_col - Number of columns in maze
+	 */
 	function GenerateMaze(size_row, size_col) {
-		debugger;
+
 		/**
 		 * Initialize 2D boolean array maze with values false
 		 * False = blocked
 		 * True = passage
 		 * */
-
 		var maze = new Array(size_col);
 		for (i = 0; i < size_col; i++) {
 			maze[i] = new Array(size_row);
@@ -299,25 +331,30 @@ function init() {
 
 		var rand_index;
 		var rand_neighbor;
-		var neighbor_row;
-		var neighbor_col;
 		
-		//Loop through frontier list
+		
+		//Loop through frontier list until it is empty 
 		while (frontierList.length > 0) {
+
 			neighbors = [];
 
+			//Pick random cell from frontierList and compute its neighbors 
 			rand_index = randomInteger(0, frontierList.length - 1);
 			computeNeighbor(maze, frontierList[rand_index].x, frontierList[rand_index].y);
 
+			//Select random neighbor from neighbors list and connect path between it and previously chosen frontier cell 
 			rand_neighbor = randomInteger(0, neighbors.length - 1);
 			connect_path(maze, frontierList[rand_index].x, frontierList[rand_index].y, neighbors[rand_neighbor].x, neighbors[rand_neighbor].y);
+
+			//Set previously chosen frontier cell to true and compute its frontier cells 
 			maze[frontierList[rand_index].x][frontierList[rand_index].y] = true;
 			computeFrontier(maze, frontierList[rand_index].x, frontierList[rand_index].y);
 
+			//Remove previoulsy chosen frontier cell from list 
 			frontierList.splice(rand_index, 1);
 		}
 
-		//Loop through maze array to set all outer facing rows and columns are walls
+		//Loop through maze array to set all outer facing rows and columns to walls
 		for (var i = 0; i < maze.length; i++) {
 			maze[0][i] = false;
 			maze[i][0] = false;
@@ -345,15 +382,18 @@ function init() {
 		return maze;
 	}
 
-	var num1 = 20;
-	var num2 = 20;
+	//Size of entire Maze
+	var sizeX = 50;
+	var sizeY = 50;
 	
-	var mazeArray = GenerateMaze(num1, num2);
+	var mazeArray = GenerateMaze(sizeX, sizeY);
 
 	//END OF generateMaze.js
 
-	//OBJECTS
 
+
+	//OBJECTS
+	//Create geometry of boxes and set colors 
 	geometry = new THREE.BoxGeometry(20, 40, 20);
 	for (var i = 0, l = geometry.faces.length; i < l; i++) {
 		var face = geometry.faces[i];
@@ -362,6 +402,7 @@ function init() {
 		face.vertexColors[2] = new THREE.Color().setHSL(3 * 0.3 + 0.5, 0.75, 3 * 0.25 + 0.75);
 	}
 
+	//Render 2D maze array with previously created boxes by looping though array and multiplying each index by size of boxes then add them to the scene
 	for (var i = 0; i < mazeArray.length; i++) {
 		for (var j = 0; j < mazeArray[i].length; j++) {
 			if (mazeArray[i][j] == false) {
@@ -376,7 +417,8 @@ function init() {
 			}
 		}
 	}
-	
+
+	//Initalize WebGL renderer and attributes 
 	renderer = new THREE.WebGLRenderer();
 	renderer.setClearColor(0xffffff);
 	renderer.setPixelRatio(window.devicePixelRatio);
@@ -394,15 +436,17 @@ function onWindowResize() {
 }
 
 
-
+//Physics 
 function animate() {
 	requestAnimationFrame(animate);
 	if (controlsEnabled) {
+		//Configure raycaster 
 		raycaster.ray.origin.copy(controls.getObject().position);
 		raycaster.ray.origin.y -= 10;
 		var intersections = raycaster.intersectObjects(objects);
 		var isOnObject = intersections.length > 0;
 		var time = performance.now();
+		//Set velocity of user 
 		var delta = (time - prevTime) / 1000;
 		velocity.x -= velocity.x * 10.0 * delta;
 		velocity.z -= velocity.z * 10.0 * delta;
