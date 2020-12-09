@@ -160,51 +160,61 @@ function init() {
 
 
 
-	//Generate 2D array here
-	/**
-	var mazeArray = [
-		[false, false, false, true, false, false],
-		[false, false, false, true, false, false],
-		[false, false, false, true, false, false],
-		[false, false, false, true, false, false],
-		[false, false, false, true, false, false]
-	];
-	*/
-
 	//START OF generateMaze.js
 
 	var frontierList = new Array();
 	var neighbors = new Array();
 
-	//Generates random integer 
+	//Generates random integer between min and max
 	function randomInteger(min, max) {
 		return Math.floor(Math.random() * (max - min + 1)) + min;
 	}
+
+
+
+	//Returns true if the given x,y coordinate is already in the frontierList
+	function includes(ex, why) {
+		for (var i = 0; i < frontierList.length; i++) {
+			if (frontierList[i].x == ex && frontierList[i].y == why) {
+				return true;
+            }
+        }
+    }
+
+
 
 	//Computes the surrounding frontier cells of given cell
 	function computeFrontier(maze, cell_row, cell_col) {
 
 		//Check cell above
 		if ((cell_row - 2) >= 0 && maze[cell_row - 2][cell_col] == false) {
-			frontierList.push({ x: (cell_row - 2), y: (cell_col) });
+			if (!includes((cell_row - 2), cell_col)) {
+				frontierList.push({ x: (cell_row - 2), y: (cell_col) });
+            }
 			//maze[cell_row - 2][cell_col] = true;
 		}
 
 		//Check cell below
 		if ((cell_row + 2) <= maze.length - 1 && (maze[cell_row + 2][cell_col]) == false) {
-			frontierList.push({ x: (cell_row + 2), y: (cell_col) });
+			if (!includes((cell_row + 2), cell_col)) {
+				frontierList.push({ x: (cell_row + 2), y: (cell_col) });
+            }
 			//maze[cell_row + 2][cell_col] = true;
 		}
 
 		//Check cell left
 		if ((cell_col - 2) >= 0 && maze[cell_row][cell_col - 2] == false) {
-			frontierList.push({ x: (cell_row), y: (cell_col - 2) });
+			if (!includes(cell_row, (cell_col - 2))) {
+				frontierList.push({ x: (cell_row), y: (cell_col - 2) });
+			}
 			//maze[cell_row][cell_col - 2] = true;
 		}
 
 		//Check cell right
 		if ((cell_col + 2) <= maze.length && maze[cell_row][cell_col + 2] == false) {
-			frontierList.push({ x: (cell_row), y: (cell_col + 2) });
+			if (!includes(cell_row, (cell_col + 2))) {
+				frontierList.push({ x: (cell_row), y: (cell_col + 2) });
+			}
 			//maze[cell_row][cell_col + 2] = true;
 		}
 	}
@@ -292,7 +302,7 @@ function init() {
 		var rand_neighbor;
 		var neighbor_row;
 		var neighbor_col;
-
+		
 		//Loop through frontier list
 		while (frontierList.length > 0) {
 			neighbors = [];
