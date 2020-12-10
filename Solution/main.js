@@ -397,19 +397,19 @@ function init() {
 	//END OF generateMaze.js
 
 
-	function solveMaze(maze) {
+	function solveMaze(solution) {
 		var solved = false;
 		function walk(column, row) {
-			if(maze[column][row] == 2) {
+			if(solution[column][row] == 2) {
 				console.log("We solved the maze at (" + column + ", " + row + ")");
 				solved = true;
-			} else if (maze[column][row] == true && solved == false) {
+			} else if (solution[column][row] == true && solved == false) {
 				
-				maze[column][row] = 9;
-				if (column < maze.length - 1 && solved == false) {
+				solution[column][row] = 9;
+				if (column < solution.length - 1 && solved == false) {
 					walk(column + 1, row);
 				}
-				if (row <= maze[column].length - 1 && solved == false) {
+				if (row <= solution[column].length - 1 && solved == false) {
 					walk(column, row + 1);
 				}
 				if (column > 0 && solved == false) {
@@ -426,7 +426,7 @@ function init() {
 			walk(0, entrance);
         }
 		
-		return maze;
+		return solution;
 	};
 
 	solveMaze(solveArray);
