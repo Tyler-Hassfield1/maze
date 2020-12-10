@@ -86,7 +86,7 @@ function init() {
 	//Create camera, scene, and light source
 	camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
 	scene = new THREE.Scene();
-	scene.fog = new THREE.Fog(0xffffff, 0, 750);
+	//scene.fog = new THREE.Fog(0xffffff, 0, 750);
 	var light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.75);
 	light.position.set(0.5, 1, 0.75);
 
@@ -292,6 +292,8 @@ function init() {
 
 	}
 
+	var entrance;
+
 	/**
 	 * Creates maze array and carries out prims randomized algorithm to generate maze
 	 * @param {any} size_row - Number of rows in maze
@@ -362,10 +364,12 @@ function init() {
 			maze[i][maze.length - 1] = false;
 		}
 
+		
 		//Set entrance 
 		for (var i = 1; i < maze.length; i++) {
 			if (maze[1][i] == true) {
 				maze[0][i] = true;
+				entrance = i;
 				break;
 			}
 		}
@@ -373,7 +377,7 @@ function init() {
 		//Set exit
 		for (var i = maze.length - 1; i > 0; i--) {
 			if (maze[maze.length - 2][i] == true) {
-				maze[maze.length - 1][i] = true;
+				maze[maze.length - 1][i] = 2;
 				break;
 			}
 		}
@@ -383,13 +387,43 @@ function init() {
 	}
 
 	//Size of entire Maze
-	var sizeX = 50;
-	var sizeY = 50;
+	var sizeX = 10;
+	var sizeY = 10;
 	
 	var mazeArray = GenerateMaze(sizeX, sizeY);
 
+	var solveArray = mazeArray;
+
 	//END OF generateMaze.js
 
+
+	function solveMaze(maze) {
+
+		function walk(column, row) {
+			if(maze[column][row] == 2) {
+				console.log("We solved the maze at (" + column + ", " + row + ")");
+			} else if(maze[column][row] == true) {
+				
+				maze[column][row] = 9;
+				if(column < maze.length - 1) {
+					walk(column + 1, row);
+				}
+				if(row < maze[column].length - 1) {
+					walk(column, row + 1);
+				}
+				if(column > 0) {
+					walk(column - 1, row);
+				}
+				if(row > 0) {
+					walk(column, row - 1);
+				}
+			}
+		};
+		walk(0, entrance);
+
+	};
+
+	solveMaze(solveArray);
 
 
 	//OBJECTS
