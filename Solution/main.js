@@ -387,8 +387,8 @@ function init() {
 	}
 
 	//Size of entire Maze
-	var sizeX = 10;
-	var sizeY = 10;
+	var sizeX = 20;
+	var sizeY = 20;
 	
 	var mazeArray = GenerateMaze(sizeX, sizeY);
 
@@ -398,33 +398,40 @@ function init() {
 
 
 	function solveMaze(maze) {
-
+		var solved = false;
 		function walk(column, row) {
 			if(maze[column][row] == 2) {
 				console.log("We solved the maze at (" + column + ", " + row + ")");
-			} else if(maze[column][row] == true) {
+				solved = true;
+			} else if (maze[column][row] == true && solved == false) {
 				
 				maze[column][row] = 9;
-				if(column < maze.length - 1) {
+				if (column < maze.length - 1 && solved == false) {
 					walk(column + 1, row);
 				}
-				if(row < maze[column].length - 1) {
+				if (row <= maze[column].length - 1 && solved == false) {
 					walk(column, row + 1);
 				}
-				if(column > 0) {
+				if (column > 0 && solved == false) {
 					walk(column - 1, row);
 				}
-				if(row > 0) {
+				if (row > 0 && solved == false) {
 					walk(column, row - 1);
 				}
 			}
+			
 		};
-		walk(0, entrance);
 
+		if (solved == false) {
+			walk(0, entrance);
+        }
+		
+		return maze;
 	};
 
 	solveMaze(solveArray);
 
+	console.log(solveArray);
 
 	//OBJECTS
 	//Create geometry of boxes and set colors 
