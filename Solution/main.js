@@ -387,12 +387,29 @@ function init() {
 	}
 
 	//Size of entire Maze
-	var sizeX = 20;
-	var sizeY = 20;
+	var sizeX = 10;
+	var sizeY = 10;
 	
 	var mazeArray = GenerateMaze(sizeX, sizeY);
 
-	var solveArray = mazeArray;
+	//Initialize new array for solution
+	var solveArray = new Array(sizeX);
+	for (i = 0; i < sizeX; i++) {
+		solveArray[i] = new Array(sizeY);
+	}
+
+	for (var i = 0; i < sizeY; i++) {
+		for (var j = 0; j < sizeX; j++) {
+			solveArray[i][j] = false;
+		}
+	}
+	
+	//Set solution array equal to the generted maze 
+	for (var i = 0; i < mazeArray.length; i++) {
+		for (var j = 0; j < mazeArray.length; j++) {
+			solveArray[i][j] = mazeArray[i][j];
+		}
+	}
 
 	//END OF generateMaze.js
 
