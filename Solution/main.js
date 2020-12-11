@@ -191,9 +191,9 @@ function init() {
 		for (var i = 0; i < frontierList.length; i++) {
 			if (frontierList[i].x == ex && frontierList[i].y == why) {
 				return true;
-            }
-        }
-    }
+			}
+		}
+	}
 
 
 	/**
@@ -209,14 +209,14 @@ function init() {
 		if ((cell_row - 2) >= 0 && maze[cell_row - 2][cell_col] == false) {
 			if (!includes((cell_row - 2), cell_col)) {
 				frontierList.push({ x: (cell_row - 2), y: (cell_col) });
-            }
+			}
 		}
 
 		//Check cell below
 		if ((cell_row + 2) <= maze.length - 1 && (maze[cell_row + 2][cell_col]) == false) {
 			if (!includes((cell_row + 2), cell_col)) {
 				frontierList.push({ x: (cell_row + 2), y: (cell_col) });
-            }
+			}
 		}
 
 		//Check cell left
@@ -333,8 +333,8 @@ function init() {
 
 		var rand_index;
 		var rand_neighbor;
-		
-		
+
+
 		//Loop through frontier list until it is empty 
 		while (frontierList.length > 0) {
 
@@ -364,7 +364,7 @@ function init() {
 			maze[i][maze.length - 1] = false;
 		}
 
-		
+
 		//Set entrance 
 		for (var i = 1; i < maze.length; i++) {
 			if (maze[1][i] == true) {
@@ -389,39 +389,44 @@ function init() {
 	//Size of entire Maze
 	var sizeX = 10;
 	var sizeY = 10;
-	
+
 	var mazeArray = GenerateMaze(sizeX, sizeY);
-
-	//Initialize new array for solution
 	var solveArray = new Array(sizeX);
-	for (i = 0; i < sizeX; i++) {
-		solveArray[i] = new Array(sizeY);
-	}
+	//Initialize new array for solution
+	function initialize(mazeArray, sizeX, sizeY) {
 
-	for (var i = 0; i < sizeY; i++) {
-		for (var j = 0; j < sizeX; j++) {
-			solveArray[i][j] = false;
+		var solveArray = new Array(sizeX);
+
+		for (i = 0; i < sizeX; i++) {
+			solveArray[i] = new Array(sizeY);
 		}
-	}
-	
-	//Set solution array equal to the generted maze 
-	for (var i = 0; i < mazeArray.length; i++) {
-		for (var j = 0; j < mazeArray.length; j++) {
-			solveArray[i][j] = mazeArray[i][j];
-		} 
+
+		for (var i = 0; i < sizeY; i++) {
+			for (var j = 0; j < sizeX; j++) {
+				solveArray[i][j] = false;
+			}
+		}
+
+		//Set solution array equal to the generted maze 
+		for (var i = 0; i < sizeX; i++) {
+			for (var j = 0; j < sizeY; j++) {
+				solveArray[i][j] = mazeArray[i][j];
+			}
+		}
+		return solveArray;
 	}
 
-	//END OF generateMaze.js
 
+	var solved = false;
 
 	function solveMaze(solution) {
-		var solved = false;
+		//var solved = false;
 		function walk(column, row) {
-			if(solution[column][row] == 2) {
+			if (solution[column][row] == 2) {
 				console.log("We solved the maze at (" + column + ", " + row + ")");
 				solved = true;
 			} else if (solution[column][row] == true && solved == false) {
-				
+
 				solution[column][row] = 9;
 				if (column < solution.length - 1 && solved == false) {
 					walk(column + 1, row);
@@ -436,19 +441,22 @@ function init() {
 					walk(column, row - 1);
 				}
 			}
-			
+
 		};
 
 		if (solved == false) {
 			walk(0, entrance);
-        }
-		
-		return solution;
+		}
+
+		return solution, solved;
 	};
 
-	solveMaze(solveArray);
+	solveMaze(initialize(mazeArray, sizeX, sizeY));
+	while (solved == false) {
+		var mazeArray = GenerateMaze(sizeX, sizeY);
+		solveMaze(initialize(mazeArray, sizeX, sizeY));
+	}
 
-	console.log(solveArray);
 
 	//OBJECTS
 	//Create geometry of boxes and set colors 
