@@ -408,7 +408,7 @@ function init() {
 	for (var i = 0; i < mazeArray.length; i++) {
 		for (var j = 0; j < mazeArray.length; j++) {
 			solveArray[i][j] = mazeArray[i][j];
-		}
+		} 
 	}
 
 	//END OF generateMaze.js
