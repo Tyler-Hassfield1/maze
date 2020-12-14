@@ -3,6 +3,7 @@ var camera, scene, renderer;
 var geometry, material, mesh;
 var controls;
 var objects = [];
+var collisions = [];
 var raycaster;
 var blocker = document.getElementById('blocker');
 var instructions = document.getElementById('instructions');
@@ -90,14 +91,14 @@ function init() {
 	//scene.fog = new THREE.Fog(0xffffff, 0, 750);
 	var light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.75);
 	light.position.set(0.5, 1, 0.75);
-
+	
 	//Add the light and pointerlockcontrols to scene
 	scene.add(light);
 	controls = new THREE.PointerLockControls(camera);
 	camera.position.set(-80, 0, 40);
 
 	scene.add(controls.getObject());
-
+	
 
 	//Handle key events for movement
 	var onKeyDown = function (event) {
@@ -172,9 +173,6 @@ function init() {
 	mesh = new THREE.Mesh(geometry, material);
 	scene.add(mesh);
 
-
-
-	//START OF generateMaze.js
 
 	var frontierList = new Array();
 	var neighbors = new Array();
@@ -390,9 +388,8 @@ function init() {
 	}
 
 	//Size of entire Maze
-	//var size = 10;
-
-	var size = window.prompt("Enter the size of the maze (4 = 4x4 maze): ");
+	var size = 10;
+	
 
 	var mazeArray = GenerateMaze(size);
 	var solveArray = new Array(size);
@@ -462,6 +459,7 @@ function init() {
 	}
 
 
+
 	//OBJECTS
 	//Create geometry of boxes and set colors 
 	geometry = new THREE.BoxGeometry(20, 40, 20);
@@ -484,6 +482,7 @@ function init() {
 				scene.add(mesh);
 				material.color.setHSL(1.5, 0.75, 1);
 				objects.push(mesh);
+				
 			}
 		}
 	}
@@ -547,6 +546,7 @@ function animate() {
 			controls.getObject().position.y = 10;
 			canJump = true;
 		}
+
 
 		prevTime = time;
 	}

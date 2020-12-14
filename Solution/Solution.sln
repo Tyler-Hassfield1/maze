@@ -5,10 +5,11 @@ VisualStudioVersion = 16.0.30717.126
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{867B17E0-8861-44A1-8E30-2AEBC32A8CE4}"
 	ProjectSection(SolutionItems) = preProject
-		generateMaze.js = generateMaze.js
+		game.html = game.html
 		html_page.html = html_page.html
 		main.js = main.js
-		..\src\mystyle.css = ..\src\mystyle.css
+		StyleSheet1.css = StyleSheet1.css
+		testscript.js = testscript.js
 	EndProjectSection
 EndProject
 Global

@@ -1,26 +1,142 @@
 ﻿<!DOCTYPE html>
-<html lang="en">
-
+<html>
 <head>
-    <title>VR Maze</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
-    <link rel="stylesheet" href="mystyle.css">
-</head>
-<body>
-    <script src="https://threejs.org/build/three.min.js"></script>
+    <title>MaiseRunner VR Game</title>
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <style>
+        body {
+            background-image: url("menuBackground.jpg");
+            background-size: cover;
+        }
+
+        html, body {
+            display: flex;
+            justify-content: center;
+            height: 100%;
+        }
+
+        body, div, h1, form, input, p {
+            padding: 0;
+            margin: 0;
+            outline: none;
+            font-family: Roboto, Arial, sans-serif;
+            font-size: 16px;
+            color: #666;
+        }
+
+        h1 {
+            padding: 10px 0;
+            font-size: 32px;
+            font-weight: 300;
+            text-align: center;
+        }
+
+        p {
+            font-size: 12px;
+        }
+
+        hr {
+            color: #a9a9a9;
+            opacity: 0.3;
+        }
+
+        .main-block {
+            max-width: 340px;
+            min-height: 260px;
+            margin: auto;
+            border-radius: 5px;
+            border: solid 1px #ccc;
+            box-shadow: 1px 2px 5px rgba(0,0,0,.31);
+            background: #ebebeb;
+        }
+
+        form {
+            margin: 0 30px;
+        }
+
+        label#icon {
+            margin: 0;
+            border-radius: 5px 0 0 5px;
+        }
+
+        input[type=text], input[type=password] {
+            width: calc(100% - 57px);
+            height: 36px;
+            margin: 13px 0 0 -5px;
+            padding-left: 10px;
+            border-radius: 0 5px 5px 0;
+            border: solid 1px #cbc9c9;
+            box-shadow: 1px 2px 5px rgba(0,0,0,.09);
+            background: #fff;
+        }
+
+        input[type=password] {
+            margin-bottom: 15px;
+        }
+
+        #icon {
+            display: inline-block;
+            padding: 9.3px 15px;
+            box-shadow: 1px 2px 5px rgba(0,0,0,.09);
+            background: #1c87c9;
+            color: #fff;
+            text-align: center;
+        }
+
+        .btn-block {
+            margin-top: 10px;
+            text-align: center;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px 0;
+            margin: 10px auto;
+            border-radius: 5px;
+            border: none;
+            background: #666867;
+            font-size: 14px;
+            font-weight: 600;
+            color: #fff;
+        }
+
+            button:hover {
+                background: #26a9e0;
+            }
+
+        #name {
+            width: 100%;
+        }
+    </style>
+    
+</head >
+    <body>
+    <script src="https://threejs.org/build/three.min.js"></SCRIPT>
     <script src="https://threejs.org/examples/js/libs/stats.min.js"></script>
     <script src="https://threejs.org/examples/js/controls/PointerLockControls.js"></script>
-    <div id="blocker">
+    <script type="module" src="testscript.js"></script>
+    <script>
+        function write() {
+            var size = document.getElementById("name").value;
 
-        <div id="instructions">
-            <span style="font-size:40px">Click to play</span>
-            <br />
-            (W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
-        </div>
+            const fs = require('fs')
 
+            fs.writeFile('Output.txt', size, (err) => { 
+                if (err) throw err;
+            }) 
+            
+        }
+        
+    </script>
+    <div class="main-block">
+        <h1>MazeRunner</h1>
+        <form action="/">
+
+            <input type="text" name="name" id="name" placeholder="Size of Maze" required />
+            <button type="button" id="size" href="/" onClick="parent.location = '/Solution/game.html'">Start</button>
+            
+        </form>
     </div>
-
-    <script type="module" src="main.js"></script>
-</body>
+    </body>
 </html>

@@ -1,8 +1,19 @@
 body {
-  background-color: lightblue;
+    background-color: lightblue;
+    margin: 0;
 }
 
 h1 {
   color: navy;
   margin-left: 20px;
 }
+
+#instructions {
+    background: blue;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    bottom: 0px;
+    left: 0px;
+}
+
