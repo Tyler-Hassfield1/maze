@@ -117,15 +117,12 @@
     <script src="https://threejs.org/examples/js/controls/PointerLockControls.js"></script>
     <script type="module" src="testscript.js"></script>
     <script>
-        function write() {
-            var size = document.getElementById("name").value;
 
-            const fs = require('fs')
-
-            fs.writeFile('Output.txt', size, (err) => { 
-                if (err) throw err;
-            }) 
-            
+        function reload() {
+            var size = document.getElementById("size").value;
+            localStorage.setItem("mazeSize", size);
+           
+            parent.location = '/Solution/game.html'
         }
         
     </script>
@@ -133,8 +130,8 @@
         <h1>MazeRunner</h1>
         <form action="/">
 
-            <input type="text" name="name" id="name" placeholder="Size of Maze" required />
-            <button type="button" id="size" href="/" onClick="parent.location = '/Solution/game.html'">Start</button>
+            <input type="text" name="size" id="size" placeholder="Size of Maze" required />
+            <button type="button" id="size" href="/" onClick= "reload()">Start</button>
             
         </form>
     </div>

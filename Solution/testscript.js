@@ -388,11 +388,13 @@ function init() {
 	}
 
 	//Size of entire Maze
-	var size = 10;
+	var mazeSize = localStorage.getItem("mazeSize");
+	var size = mazeSize;
 	
 
 	var mazeArray = GenerateMaze(size);
 	var solveArray = new Array(size);
+
 	//Initialize new array for solution
 	function initialize(mazeArray, size) {
 
