@@ -154,24 +154,38 @@ function init() {
 	geometry = new THREE.PlaneGeometry(20000, 20000, 500, 500);
 	geometry.rotateX(- Math.PI / 2);
 
-	//Create pattern of floor
-	for (var i = 0, l = geometry.vertices.length; i < l; i++) {
-		var vertex = geometry.vertices[i];
-		vertex.x += Math.random() * 20 - 10;
-		vertex.y += Math.random() * 2;
-		vertex.z += Math.random() * 20 - 10;
-	}
-	//Color floor pattern 
-	for (var i = 0, l = geometry.faces.length; i < l; i++) {
-		var face = geometry.faces[i];
-		face.vertexColors[0] = new THREE.Color().setHSL(Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
-		face.vertexColors[1] = new THREE.Color().setHSL(Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
-		face.vertexColors[2] = new THREE.Color().setHSL(Math.random() * 0.3 + 0.5, 0.75, Math.random() * 0.25 + 0.75);
-	}
+
+	const tex = new THREE.TextureLoader().load('soil.jpg');
+	
+	tex.wrapS = THREE.RepeatWrapping;
+	tex.wrapT = THREE.RepeatWrapping;
+	tex.repeat.set(180, 180);
+	const gravel_material = new THREE.MeshBasicMaterial({ map: tex });
+
 	//Mesh the geometry and material (Colors) together and add to scene
-	material = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors });
-	mesh = new THREE.Mesh(geometry, material);
+	//material = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors });
+	mesh = new THREE.Mesh(geometry, gravel_material);
 	scene.add(mesh);
+
+
+	//SKY
+	//add skymap 
+	//load sky images 
+	const skyTexture = new THREE.TextureLoader().load('sky.jpeg');
+	/*
+	tex.wrapS = THREE.RepeatWrapping;
+	tex.wrapT = THREE.RepeatWrapping;
+	tex.repeat.set(180, 180);
+	*/
+	const sky_material = new THREE.MeshBasicMaterial({ map: skyTexture });
+
+	//create a skybox 
+	var size = 10000;
+	var skyboxMesh = new THREE.Mesh(
+		new THREE.CubeGeometry(size, size, size), sky_material);
+	//IMPORTANT!! draw on the inside instead of outside 
+	skyboxMesh.flipSided = true; // you must have this or you won't see anything 
+	scene.add(skyboxMesh); 
 
 
 	var frontierList = new Array();
@@ -461,28 +475,23 @@ function init() {
 	}
 
 
+	
 
 	//OBJECTS
-	//Create geometry of boxes and set colors 
+	//Create geometry of boxes and set textures
 	geometry = new THREE.BoxGeometry(20, 40, 20);
-	for (var i = 0, l = geometry.faces.length; i < l; i++) {
-		var face = geometry.faces[i];
-		face.vertexColors[0] = new THREE.Color().setHSL(3 * 0.3 + 0.5, 0.75, 3 * 0.25 + 0.75);
-		face.vertexColors[1] = new THREE.Color().setHSL(3 * 0.3 + 0.5, 0.75, 3 * 0.25 + 0.75);
-		face.vertexColors[2] = new THREE.Color().setHSL(3 * 0.3 + 0.5, 0.75, 3 * 0.25 + 0.75);
-	}
+	const texture = new THREE.TextureLoader().load('bricks.png');
+	const mat = new THREE.MeshBasicMaterial({ map: texture });
 
 	//Render 2D maze array with previously created boxes by looping though array and multiplying each index by size of boxes then add them to the scene
 	for (var i = 0; i < mazeArray.length; i++) {
 		for (var j = 0; j < mazeArray[i].length; j++) {
 			if (mazeArray[i][j] == false) {
-				material = new THREE.MeshPhongMaterial({ specular: 0xffffff, shading: THREE.FlatShading, vertexColors: THREE.VertexColors });
-				var mesh = new THREE.Mesh(geometry, material);
+				var mesh = new THREE.Mesh(geometry, mat);
 				mesh.position.x = i * 20;
 				mesh.position.y = 12;
 				mesh.position.z = j * 20;
 				scene.add(mesh);
-				material.color.setHSL(1.5, 0.75, 1);
 				objects.push(mesh);
 				
 			}
