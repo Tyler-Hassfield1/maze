@@ -3,7 +3,10 @@ var camera, scene, renderer;
 var geometry, material, mesh;
 var controls;
 var objects = [];
-var collisions = [];
+var collisionX1 = [];
+var collisionX2 = [];
+var collisionZ1 = [];
+var collisionZ2 = [];
 var raycaster;
 var blocker = document.getElementById('blocker');
 var instructions = document.getElementById('instructions');
@@ -87,6 +90,7 @@ function init() {
 	//Create camera, scene, and light source
 	camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
 	camera.rotation.y = 80;
+	
 	scene = new THREE.Scene();
 	//scene.fog = new THREE.Fog(0xffffff, 0, 750);
 	var light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.75);
@@ -119,7 +123,7 @@ function init() {
 				moveRight = true;
 				break;
 			case 32: // space
-				if (canJump === true) velocity.y += 350;
+				if (canJump === true) velocity.y += 200;
 				canJump = false;
 				break;
 		}
@@ -155,11 +159,11 @@ function init() {
 	geometry.rotateX(- Math.PI / 2);
 
 
-	const tex = new THREE.TextureLoader().load('soil.jpg');
+	const tex = new THREE.TextureLoader().load('minecraftsoil.jpg');
 	
 	tex.wrapS = THREE.RepeatWrapping;
 	tex.wrapT = THREE.RepeatWrapping;
-	tex.repeat.set(180, 180);
+	tex.repeat.set(1200, 1200);
 	const gravel_material = new THREE.MeshBasicMaterial({ map: tex });
 
 	//Mesh the geometry and material (Colors) together and add to scene
@@ -167,25 +171,6 @@ function init() {
 	mesh = new THREE.Mesh(geometry, gravel_material);
 	scene.add(mesh);
 
-
-	//SKY
-	//add skymap 
-	//load sky images 
-	const skyTexture = new THREE.TextureLoader().load('sky.jpeg');
-	/*
-	tex.wrapS = THREE.RepeatWrapping;
-	tex.wrapT = THREE.RepeatWrapping;
-	tex.repeat.set(180, 180);
-	*/
-	const sky_material = new THREE.MeshBasicMaterial({ map: skyTexture });
-
-	//create a skybox 
-	var size = 10000;
-	var skyboxMesh = new THREE.Mesh(
-		new THREE.CubeGeometry(size, size, size), sky_material);
-	//IMPORTANT!! draw on the inside instead of outside 
-	skyboxMesh.flipSided = true; // you must have this or you won't see anything 
-	scene.add(skyboxMesh); 
 
 
 	var frontierList = new Array();
@@ -480,17 +465,31 @@ function init() {
 	//OBJECTS
 	//Create geometry of boxes and set textures
 	geometry = new THREE.BoxGeometry(20, 40, 20);
-	const texture = new THREE.TextureLoader().load('bricks.png');
+	const texture = new THREE.TextureLoader().load('mossybrick.jpg');
 	const mat = new THREE.MeshBasicMaterial({ map: texture });
 
+	const texture2 = new THREE.TextureLoader().load('stonebrick.jpg');
+	const mat2 = new THREE.MeshBasicMaterial({ map: texture2 });
+
 	//Render 2D maze array with previously created boxes by looping though array and multiplying each index by size of boxes then add them to the scene
+	var index = 0;
 	for (var i = 0; i < mazeArray.length; i++) {
 		for (var j = 0; j < mazeArray[i].length; j++) {
 			if (mazeArray[i][j] == false) {
-				var mesh = new THREE.Mesh(geometry, mat);
+				if ((randomInteger(0, 100)) % 2 == 0) {
+					var mesh = new THREE.Mesh(geometry, mat2);
+				} else {
+					var mesh = new THREE.Mesh(geometry, mat2);
+                }
+				
 				mesh.position.x = i * 20;
 				mesh.position.y = 12;
 				mesh.position.z = j * 20;
+				collisionX1[index] = mesh.position.x + 12;
+				collisionX2[index] = mesh.position.x - 12;
+				collisionZ1[index] = mesh.position.z + 12;
+				collisionZ2[index] = mesh.position.z - 12;
+				index++;
 				scene.add(mesh);
 				objects.push(mesh);
 				
@@ -516,6 +515,18 @@ function onWindowResize() {
 }
 
 
+function checkCollision() {
+	for (var i = 0; i < collisionX1.length; i++) {
+		if (camera.position.x < collisionX1[i] && camera.position.x > collisionX2[i]) {
+			if (camera.position.z < collisionZ1[i] && camera.position.z > collisionZ2[i]) {
+				velocity.z = 0;
+				velocity.x = 0;
+            }
+        }
+    }
+}
+
+
 //Physics 
 function animate() {
 	requestAnimationFrame(animate);
@@ -525,13 +536,14 @@ function animate() {
 		raycaster.ray.origin.y -= 10;
 		var intersections = raycaster.intersectObjects(objects);
 		var isOnObject = intersections.length > 0;
+		var hitObject = intersections.length > 0;
 		var time = performance.now();
 		//Set velocity of user 
 		var delta = (time - prevTime) / 1000;
 		velocity.x -= velocity.x * 10.0 * delta;
 		velocity.z -= velocity.z * 10.0 * delta;
 		velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
-
+		
 		if (moveForward) {
 			velocity.z -= 400.0 * delta;
 		}
@@ -548,6 +560,11 @@ function animate() {
 			velocity.y = Math.max(0, velocity.y);
 			canJump = true;
 		}
+		if (hitObject == true) {
+			velocity.x = 0;
+        }
+
+		checkCollision();
 
 		controls.getObject().translateX(velocity.x * delta);
 		controls.getObject().translateY(velocity.y * delta);
