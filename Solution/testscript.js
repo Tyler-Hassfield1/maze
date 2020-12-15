@@ -124,7 +124,7 @@ function init() {
 				break;
 			case 32: // space
 				if (canJump === true) velocity.y += 200;
-				canJump = false;
+				canJump = true;
 				break;
 		}
 	};
@@ -519,8 +519,7 @@ function checkCollision() {
 	for (var i = 0; i < collisionX1.length; i++) {
 		if (camera.position.x < collisionX1[i] && camera.position.x > collisionX2[i]) {
 			if (camera.position.z < collisionZ1[i] && camera.position.z > collisionZ2[i]) {
-				velocity.z = 0;
-				velocity.x = 0;
+				return true;
             }
         }
     }
@@ -536,7 +535,6 @@ function animate() {
 		raycaster.ray.origin.y -= 10;
 		var intersections = raycaster.intersectObjects(objects);
 		var isOnObject = intersections.length > 0;
-		var hitObject = intersections.length > 0;
 		var time = performance.now();
 		//Set velocity of user 
 		var delta = (time - prevTime) / 1000;
@@ -545,30 +543,75 @@ function animate() {
 		velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
 		
 		if (moveForward) {
-			velocity.z -= 400.0 * delta;
+			if (checkCollision()) {
+				velocity.z += 100;
+				velocity.x = 0;
+				controls.getObject().translateX(velocity.x * delta);
+				controls.getObject().translateY(velocity.y * delta);
+				controls.getObject().translateZ(velocity.z * delta);
+
+			} else {
+				velocity.z -= 400.0 * delta;
+				controls.getObject().translateX(velocity.x * delta);
+				controls.getObject().translateY(velocity.y * delta);
+				controls.getObject().translateZ(velocity.z * delta);
+            }
+			
+			
+		} else if (moveBackward) {
+			if (checkCollision()) {
+				velocity.z -= 100;
+				velocity.x = 0;
+				controls.getObject().translateX(velocity.x * delta);
+				controls.getObject().translateY(velocity.y * delta);
+				controls.getObject().translateZ(velocity.z * delta);
+			} else {
+				velocity.z += 400.0 * delta;
+				controls.getObject().translateX(velocity.x * delta);
+				controls.getObject().translateY(velocity.y * delta);
+				controls.getObject().translateZ(velocity.z * delta);
+            }
+			
+		} else if (moveLeft) {
+			if (checkCollision()) {
+				velocity.z = 0;
+				velocity.x += 100;
+				controls.getObject().translateX(velocity.x * delta);
+				controls.getObject().translateY(velocity.y * delta);
+				controls.getObject().translateZ(velocity.z * delta);
+			} else {
+				velocity.x -= 400.0 * delta;
+				controls.getObject().translateX(velocity.x * delta);
+				controls.getObject().translateY(velocity.y * delta);
+				controls.getObject().translateZ(velocity.z * delta);
+			}
+			
+		} else if (moveRight) {
+			if (checkCollision()) {
+				velocity.z = 0;
+				velocity.x -= 100;
+				controls.getObject().translateX(velocity.x * delta);
+				controls.getObject().translateY(velocity.y * delta);
+				controls.getObject().translateZ(velocity.z * delta);
+			} else {
+				velocity.x += 400.0 * delta;
+				controls.getObject().translateX(velocity.x * delta);
+				controls.getObject().translateY(velocity.y * delta);
+				controls.getObject().translateZ(velocity.z * delta);
+			}
+			
+		} else {
+			velocity.x = 0;
+			velocity.z = 0;
 		}
-		if (moveBackward) {
-			velocity.z += 400.0 * delta;
-		}
-		if (moveLeft) {
-			velocity.x -= 400.0 * delta;
-		}
-		if (moveRight) {
-			velocity.x += 400.0 * delta;
-		}
+
 		if (isOnObject === true) {
 			velocity.y = Math.max(0, velocity.y);
 			canJump = true;
 		}
-		if (hitObject == true) {
-			velocity.x = 0;
-        }
+	
 
-		checkCollision();
-
-		controls.getObject().translateX(velocity.x * delta);
-		controls.getObject().translateY(velocity.y * delta);
-		controls.getObject().translateZ(velocity.z * delta);
+		
 		if (controls.getObject().position.y < 10) {
 			velocity.y = 0;
 			controls.getObject().position.y = 10;
