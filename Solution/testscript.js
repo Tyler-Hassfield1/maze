@@ -21,10 +21,10 @@ if (havePointerLock) {
 		if (document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element) {
 			controlsEnabled = true;
 			controls.enabled = true;
-			blocker.style.display = 'none';
+			//blocker.style.display = 'none';
 		} else {
 			controls.enabled = false;
-			blocker.style.display = '-webkit-box';
+			//blocker.style.display = '-webkit-box';
 			blocker.style.display = '-moz-box';
 			blocker.style.display = 'box';
 			instructions.style.display = '';
@@ -159,7 +159,7 @@ function init() {
 	geometry.rotateX(- Math.PI / 2);
 
 
-	const tex = new THREE.TextureLoader().load('minecraftsoil.jpg');
+	const tex = new THREE.TextureLoader().load('soil.jpg');
 	
 	tex.wrapS = THREE.RepeatWrapping;
 	tex.wrapT = THREE.RepeatWrapping;
@@ -468,7 +468,7 @@ function init() {
 	const texture = new THREE.TextureLoader().load('mossybrick.jpg');
 	const mat = new THREE.MeshBasicMaterial({ map: texture });
 
-	const texture2 = new THREE.TextureLoader().load('stonebrick.jpg');
+	const texture2 = new THREE.TextureLoader().load('brick.jpg');
 	const mat2 = new THREE.MeshBasicMaterial({ map: texture2 });
 
 	//Render 2D maze array with previously created boxes by looping though array and multiplying each index by size of boxes then add them to the scene

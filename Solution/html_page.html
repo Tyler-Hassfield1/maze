@@ -1,7 +1,7 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-    <title>MaiseRunner VR Game</title>
+    <title>MazeRunner VR Game</title>
 
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
     <style>
@@ -120,9 +120,16 @@
 
         function reload() {
             var size = document.getElementById("size").value;
-            localStorage.setItem("mazeSize", size);
-           
-            parent.location = '/Solution/game.html'
+            if (size < 10) {
+                window.alert("Please enter a size greater than 10.");
+
+            } else{
+                localStorage.setItem("mazeSize", size);
+
+                parent.location = '/Solution/game.html'
+            }
+
+            
         }
         
     </script>
