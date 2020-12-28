@@ -10,7 +10,7 @@ var collisionZ2 = [];
 var raycaster;
 var blocker = document.getElementById('blocker');
 var instructions = document.getElementById('instructions');
-// https://www.html5rocks.com/en/tutorials/pointerlock/intro/
+
 var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
 
 
@@ -90,8 +90,8 @@ function init() {
 	//Create camera, scene, and light source
 	camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
 	camera.rotation.y = 80;
-	
 	scene = new THREE.Scene();
+
 	//scene.fog = new THREE.Fog(0xffffff, 0, 750);
 	var light = new THREE.HemisphereLight(0xeeeeff, 0x777788, 0.75);
 	light.position.set(0.5, 1, 0.75);
@@ -126,7 +126,7 @@ function init() {
 				if (canJump === true) {
 					velocity.y += 200;
 				}
-				canJump = true;
+				
 				break;
 		}
 	};
@@ -159,10 +159,7 @@ function init() {
 	//Geometry for floor plane 
 	geometry = new THREE.PlaneGeometry(20000, 20000, 500, 500);
 	geometry.rotateX(- Math.PI / 2);
-
-
 	const tex = new THREE.TextureLoader().load('soil.jpg');
-	
 	tex.wrapS = THREE.RepeatWrapping;
 	tex.wrapT = THREE.RepeatWrapping;
 	tex.repeat.set(1200, 1200);
@@ -172,8 +169,6 @@ function init() {
 	//material = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors });
 	mesh = new THREE.Mesh(geometry, gravel_material);
 	scene.add(mesh);
-
-
 
 	var frontierList = new Array();
 	var neighbors = new Array();
@@ -324,10 +319,8 @@ function init() {
 		var cell_row = randomInteger(1, size - 1);
 		var cell_col = randomInteger(1, size - 1);
 
-
 		//Set random cell to true 
 		maze[cell_row][cell_col] = true;
-
 
 		//Create list of frontier cells
 		computeFrontier(maze, cell_row, cell_col);
@@ -391,10 +384,7 @@ function init() {
 	//Size of entire Maze
 	var mazeSize = localStorage.getItem("mazeSize");
 	var size = mazeSize;
-	
-
-	var mazeArray = GenerateMaze(size);
-	var solveArray = new Array(size);
+	var mazeArray = GenerateMaze(size)
 
 	//Initialize new array for solution
 	function initialize(mazeArray, size) {
@@ -424,7 +414,7 @@ function init() {
 	var solved = false;
 
 	function solveMaze(solution) {
-		//var solved = false;
+	
 		function walk(column, row) {
 			if (solution[column][row] == 2) {
 				console.log("We solved the maze at (" + column + ", " + row + ")");
@@ -462,16 +452,12 @@ function init() {
 	}
 
 
-	
-
 	//OBJECTS
 	//Create geometry of boxes and set textures
 	geometry = new THREE.BoxGeometry(20, 40, 20);
-	const texture = new THREE.TextureLoader().load('mossybrick.jpg');
-	const mat = new THREE.MeshBasicMaterial({ map: texture });
 
-	const texture2 = new THREE.TextureLoader().load('brick.jpg');
-	const mat2 = new THREE.MeshBasicMaterial({ map: texture2 });
+	const texture = new THREE.TextureLoader().load('brick.jpg');
+	const mat = new THREE.MeshBasicMaterial({ map: texture });
 
 	//Render 2D maze array with previously created boxes by looping though array and multiplying each index by size of boxes then add them to the scene
 	var index = 0;
@@ -479,9 +465,9 @@ function init() {
 		for (var j = 0; j < mazeArray[i].length; j++) {
 			if (mazeArray[i][j] == false) {
 				if ((randomInteger(0, 100)) % 2 == 0) {
-					var mesh = new THREE.Mesh(geometry, mat2);
+					var mesh = new THREE.Mesh(geometry, mat);
 				} else {
-					var mesh = new THREE.Mesh(geometry, mat2);
+					var mesh = new THREE.Mesh(geometry, mat);
                 }
 				
 				mesh.position.x = i * 20;
@@ -517,6 +503,7 @@ function onWindowResize() {
 }
 
 
+//Determines if a collision exists, if so return true
 function checkCollision() {
 	for (var i = 0; i < collisionX1.length; i++) {
 		if (camera.position.x < collisionX1[i] && camera.position.x > collisionX2[i]) {
@@ -605,18 +592,14 @@ function animate() {
 		} else {
 			velocity.x = 0;
 			velocity.z = 0;
-			if (canJump == true) {
-				controls.getObject().translateY(velocity.y * delta);
-            }
 		}
-
+		 
+		/**
 		if (isOnObject === true) {
 			velocity.y = Math.max(0, velocity.y);
 			canJump = true;
-		}
+		}*/
 	
-
-		
 		if (controls.getObject().position.y < 10) {
 			velocity.y = 0;
 			controls.getObject().position.y = 10;
