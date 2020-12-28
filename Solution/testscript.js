@@ -113,7 +113,8 @@ function init() {
 				break;
 			case 37: // left
 			case 65: // a
-				moveLeft = true; break;
+				moveLeft = true;
+				break;
 			case 40: // down
 			case 83: // s
 				moveBackward = true;
@@ -121,6 +122,9 @@ function init() {
 			case 39: // right
 			case 68: // d
 				moveRight = true;
+				break;
+			case 79:
+				showSolution();
 				break;
 			case 32: // space
 				if (canJump === true) {
@@ -148,6 +152,9 @@ function init() {
 			case 68: // d
 				moveRight = false;
 				break;
+			case 79:
+				removeSolution();
+				break;
 		}
 	};
 	document.addEventListener('keydown', onKeyDown, false);
@@ -156,19 +163,6 @@ function init() {
 
 
 
-	//Geometry for floor plane 
-	geometry = new THREE.PlaneGeometry(20000, 20000, 500, 500);
-	geometry.rotateX(- Math.PI / 2);
-	const tex = new THREE.TextureLoader().load('soil.jpg');
-	tex.wrapS = THREE.RepeatWrapping;
-	tex.wrapT = THREE.RepeatWrapping;
-	tex.repeat.set(1200, 1200);
-	const gravel_material = new THREE.MeshBasicMaterial({ map: tex });
-
-	//Mesh the geometry and material (Colors) together and add to scene
-	//material = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors });
-	mesh = new THREE.Mesh(geometry, gravel_material);
-	scene.add(mesh);
 
 	var frontierList = new Array();
 	var neighbors = new Array();
@@ -384,12 +378,13 @@ function init() {
 	//Size of entire Maze
 	var mazeSize = localStorage.getItem("mazeSize");
 	var size = mazeSize;
-	var mazeArray = GenerateMaze(size)
+	var mazeArray = GenerateMaze(size);
+	var solveArray;
 
 	//Initialize new array for solution
 	function initialize(mazeArray, size) {
 
-		var solveArray = new Array(size);
+		solveArray = new Array(size);
 
 		for (i = 0; i < size; i++) {
 			solveArray[i] = new Array(size);
@@ -451,6 +446,43 @@ function init() {
 		solveMaze(initialize(mazeArray, size));
 	}
 
+	//FLOOR
+	//Geometry for floor plane 
+	geometry = new THREE.PlaneGeometry(20000, 20000, 500, 500);
+	geometry.rotateX(- Math.PI / 2);
+	const tex = new THREE.TextureLoader().load('soil.jpg');
+	tex.wrapS = THREE.RepeatWrapping;
+	tex.wrapT = THREE.RepeatWrapping;
+	tex.repeat.set(1200, 1200);
+	const gravel_material = new THREE.MeshBasicMaterial({ map: tex });
+
+	//Mesh the geometry and material (Colors) together and add to scene
+	//material = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors });
+	mesh = new THREE.Mesh(geometry, gravel_material);
+	scene.add(mesh);
+
+
+	function showSolution() {
+		for (var i = 0; i < solveArray.length; i++) {
+			for (var j = 0; j < solveArray[i].length; j++) {
+				if (solveArray[i][j] == 9) {
+					geometry = new THREE.PlaneGeometry(20, 20);
+					geometry.rotateX(- Math.PI / 2);
+					const tex = new THREE.TextureLoader().load('redbrick.jpg');
+					const gravel_material = new THREE.MeshBasicMaterial({ map: tex });
+					mesh = new THREE.Mesh(geometry, gravel_material);
+					mesh.position.x = i * 20;
+					mesh.position.y = .01;
+					mesh.position.z = j * 20;
+					scene.add(mesh);
+				}
+			}
+		}
+    }
+	
+	function removeSolution(){
+		scene.remove(mesh);
+    }
 
 	//OBJECTS
 	//Create geometry of boxes and set textures
