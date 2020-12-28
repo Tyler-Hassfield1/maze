@@ -123,7 +123,9 @@ function init() {
 				moveRight = true;
 				break;
 			case 32: // space
-				if (canJump === true) velocity.y += 200;
+				if (canJump === true) {
+					velocity.y += 200;
+				}
 				canJump = true;
 				break;
 		}
@@ -603,6 +605,9 @@ function animate() {
 		} else {
 			velocity.x = 0;
 			velocity.z = 0;
+			if (canJump == true) {
+				controls.getObject().translateY(velocity.y * delta);
+            }
 		}
 
 		if (isOnObject === true) {
