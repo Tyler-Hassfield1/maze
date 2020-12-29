@@ -126,6 +126,9 @@ function init() {
 			case 79:
 				showSolution();
 				break;
+			case 80:
+				removeSolution();
+				break;
 			case 32: // space
 				if (canJump === true) {
 					velocity.y += 200;
@@ -151,9 +154,6 @@ function init() {
 			case 39: // right
 			case 68: // d
 				moveRight = false;
-				break;
-			case 79:
-				removeSolution();
 				break;
 		}
 	};
@@ -475,13 +475,15 @@ function init() {
 					mesh.position.y = .01;
 					mesh.position.z = j * 20;
 					scene.add(mesh);
+					
 				}
 			}
 		}
     }
 	
 	function removeSolution(){
-		scene.remove(mesh);
+		tex.dispose(); 
+		gravel_material.dispose();
     }
 
 	//OBJECTS
