@@ -1,4 +1,4 @@
-
+var mazeArray;
 var camera, scene, renderer;
 var geometry, material, mesh;
 var controls;
@@ -378,7 +378,7 @@ function init() {
 	//Size of entire Maze
 	var mazeSize = localStorage.getItem("mazeSize");
 	var size = mazeSize;
-	var mazeArray = GenerateMaze(size);
+	mazeArray = GenerateMaze(size);
 	var solveArray;
 
 	//Initialize new array for solution
@@ -485,7 +485,7 @@ function init() {
 		tex.dispose(); 
 		gravel_material.dispose();
     }
-
+	/**
 	//OBJECTS
 	//Create geometry of boxes and set textures
 	geometry = new THREE.BoxGeometry(20, 40, 20);
@@ -518,6 +518,7 @@ function init() {
 			}
 		}
 	}
+	*/
 
 	//Initalize WebGL renderer and attributes 
 	renderer = new THREE.WebGLRenderer();
@@ -557,13 +558,33 @@ function animate() {
 		raycaster.ray.origin.copy(controls.getObject().position);
 		raycaster.ray.origin.y -= 10;
 		var intersections = raycaster.intersectObjects(objects);
-		var isOnObject = intersections.length > 0;
 		var time = performance.now();
 		//Set velocity of user 
 		var delta = (time - prevTime) / 1000;
 		velocity.x -= velocity.x * 10.0 * delta;
 		velocity.z -= velocity.z * 10.0 * delta;
 		velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+
+		
+		geometry = new THREE.BoxGeometry(20, 40, 20);
+		const texture = new THREE.TextureLoader().load('brick.jpg');
+		const mat = new THREE.MeshBasicMaterial({ map: texture });
+		var mesh = new THREE.Mesh(geometry, mat);
+		
+		var locationx = Math.round(camera.position.x / 20);
+		var locationz = Math.round(camera.position.z / 20);
+		console.log(Math.round(locationx));
+		console.log(Math.round(locationz));
+
+		if (mazeArray[locationx + 5][locationz + 5] == false) {
+			mesh.position.x = Math.round(locationx) * 20;
+			mesh.position.y = 12;
+			mesh.position.z = Math.round(locationz) * 20;
+			scene.add(mesh);
+			objects.push(mesh);
+        }
+		
+		
 		
 		if (moveForward) {
 			if (checkCollision()) {
