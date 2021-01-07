@@ -441,8 +441,9 @@ function init() {
 	};
 
 	solveMaze(initialize(mazeArray, size));
+
 	while (solved == false) {
-		var mazeArray = GenerateMaze(size);
+	    mazeArray = GenerateMaze(size);
 		solveMaze(initialize(mazeArray, size));
 	}
 
@@ -527,6 +528,8 @@ function init() {
 	renderer.setSize(window.innerWidth, window.innerHeight);
 	document.body.appendChild(renderer.domElement);
 	window.addEventListener('resize', onWindowResize, false);
+
+	return mazeArray;
 }
 
 
@@ -571,12 +574,12 @@ function animate() {
 		const mat = new THREE.MeshBasicMaterial({ map: texture });
 		var mesh = new THREE.Mesh(geometry, mat);
 		
-		var locationx = Math.round(camera.position.x / 20);
-		var locationz = Math.round(camera.position.z / 20);
+		var locationx = Math.abs(Math.round(camera.position.x / 20));
+		var locationz = Math.abs(Math.round(camera.position.z / 20));
 		console.log(Math.round(locationx));
 		console.log(Math.round(locationz));
-
-		if (mazeArray[locationx + 5][locationz + 5] == false) {
+		
+		if (mazeArray[locationx][locationz] == false) {
 			mesh.position.x = Math.round(locationx) * 20;
 			mesh.position.y = 12;
 			mesh.position.z = Math.round(locationz) * 20;
