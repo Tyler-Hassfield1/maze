@@ -486,7 +486,7 @@ function init() {
 		tex.dispose(); 
 		gravel_material.dispose();
     }
-	/**
+	
 	//OBJECTS
 	//Create geometry of boxes and set textures
 	geometry = new THREE.BoxGeometry(20, 40, 20);
@@ -519,7 +519,7 @@ function init() {
 			}
 		}
 	}
-	*/
+	
 
 	//Initalize WebGL renderer and attributes 
 	renderer = new THREE.WebGLRenderer();
@@ -553,6 +553,49 @@ function checkCollision() {
 }
 
 
+function lookAheadAndRender(locationx, locationz) {
+	geometry = new THREE.BoxGeometry(20, 40, 20);
+	const texture = new THREE.TextureLoader().load('brick.jpg');
+	const mat = new THREE.MeshBasicMaterial({ map: texture });
+	var mesh = new THREE.Mesh(geometry, mat);
+
+	if (mazeArray[locationx][locationz - 2] == false) {
+		mesh.position.x = Math.round(locationx) * 20;
+		mesh.position.y = 12;
+		mesh.position.z = Math.round(locationz - 2) * 20;
+		scene.add(mesh);
+		objects.push(mesh);
+	}
+	if (mazeArray[locationx][locationz + 2] == false) {
+		mesh.position.x = Math.round(locationx) * 20;
+		mesh.position.y = 12;
+		mesh.position.z = Math.round(locationz + 2) * 20;
+		scene.add(mesh);
+		objects.push(mesh);
+	}
+	if (mazeArray[locationx + 2][locationz - 1] == false) {
+		mesh.position.x = Math.round(locationx + 2) * 20;
+		mesh.position.y = 12;
+		mesh.position.z = Math.round(locationz - 1) * 20;
+		scene.add(mesh);
+		objects.push(mesh);
+	}
+	if (mazeArray[locationx + 2][locationz + 2] == false) {
+		mesh.position.x = Math.round(locationx + 2) * 20;
+		mesh.position.y = 12;
+		mesh.position.z = Math.round(locationz + 2) * 20;
+		scene.add(mesh);
+		objects.push(mesh);
+	}
+	if (mazeArray[locationx + 2][locationz] == false) {
+		mesh.position.x = Math.round(locationx + 2) * 20;
+		mesh.position.y = 12;
+		mesh.position.z = Math.round(locationz) * 20;
+		scene.add(mesh);
+		objects.push(mesh);
+	}
+}
+
 //Physics 
 function animate() {
 	requestAnimationFrame(animate);
@@ -567,26 +610,10 @@ function animate() {
 		velocity.x -= velocity.x * 10.0 * delta;
 		velocity.z -= velocity.z * 10.0 * delta;
 		velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
-
 		
-		geometry = new THREE.BoxGeometry(20, 40, 20);
-		const texture = new THREE.TextureLoader().load('brick.jpg');
-		const mat = new THREE.MeshBasicMaterial({ map: texture });
-		var mesh = new THREE.Mesh(geometry, mat);
-		
-		var locationx = Math.abs(Math.round(camera.position.x / 20));
-		var locationz = Math.abs(Math.round(camera.position.z / 20));
-		console.log(Math.round(locationx));
-		console.log(Math.round(locationz));
-		
-		if (mazeArray[locationx][locationz] == false) {
-			mesh.position.x = Math.round(locationx) * 20;
-			mesh.position.y = 12;
-			mesh.position.z = Math.round(locationz) * 20;
-			scene.add(mesh);
-			objects.push(mesh);
-        }
-		
+		//var locationx = Math.abs(Math.round(camera.position.x / 20));
+		//var locationz = Math.abs(Math.round(camera.position.z / 20));
+		//lookAheadAndRender(locationx, locationz);
 		
 		
 		if (moveForward) {
