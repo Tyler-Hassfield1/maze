@@ -1,6 +1,8 @@
+
+
 var mazeArray;
 var camera, scene, renderer;
-var geometry, material, mesh;
+var grass_geometry, geometry, material, mesh;
 var controls;
 var objects = [];
 var collisionX1 = [];
@@ -86,6 +88,7 @@ var velocity = new THREE.Vector3();
 
 
 
+
 function init() {
 	//Create camera, scene, and light source
 	camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
@@ -103,6 +106,22 @@ function init() {
 
 	scene.add(controls.getObject());
 	
+
+	var skyGeo = new THREE.SphereGeometry(100000, 25, 25);
+
+	var loader = new THREE.TextureLoader(),
+		texture1 = loader.load("universe.jpg");
+
+	var material = new THREE.MeshPhongMaterial({
+		map: texture1,
+	});
+
+	var sky = new THREE.Mesh(skyGeo, material);
+	sky.material.side = THREE.BackSide;
+	scene.add(sky);
+
+
+
 
 	//Handle key events for movement
 	var onKeyDown = function (event) {
@@ -447,6 +466,13 @@ function init() {
 		solveMaze(initialize(mazeArray, size));
 	}
 
+
+	//////////////////////////////////////////////////////////////
+	
+	////////////////////////////////////////////////////////////////
+
+
+
 	//FLOOR
 	//Geometry for floor plane 
 	geometry = new THREE.PlaneGeometry(20000, 20000, 500, 500);
@@ -457,11 +483,9 @@ function init() {
 	tex.repeat.set(1200, 1200);
 	const gravel_material = new THREE.MeshBasicMaterial({ map: tex });
 
-	//Mesh the geometry and material (Colors) together and add to scene
-	//material = new THREE.MeshBasicMaterial({ vertexColors: THREE.VertexColors });
 	mesh = new THREE.Mesh(geometry, gravel_material);
 	scene.add(mesh);
-
+	
 
 	function showSolution() {
 		for (var i = 0; i < solveArray.length; i++) {
@@ -519,7 +543,37 @@ function init() {
 			}
 		}
 	}
+
+
+
 	
+	grass_geometry = new THREE.BoxGeometry(2, 4, 2);
+
+	//const grass_texture = new THREE.TextureLoader().load('images/grass01.png');
+	const grass_mat = [
+		new THREE.MeshBasicMaterial({ map: loader.load('images/grass01.png'), opacity: 1, transparent: true}),
+		new THREE.MeshBasicMaterial({ map: loader.load('images/grass01.png'), opacity: 1, transparent: true}),
+		new THREE.MeshBasicMaterial({ map: loader.load('images/grass01.png'), opacity: 0, transparent: true}),
+		new THREE.MeshBasicMaterial({ map: loader.load('images/grass01.png'), opacity: 1, transparent: true}),
+		new THREE.MeshBasicMaterial({ map: loader.load('images/grass01.png'), opacity: 1, transparent: true}),
+		new THREE.MeshBasicMaterial({ map: loader.load('images/grass01.png'), opacity: 1, transparent: true})
+	];
+	
+
+
+	for (var i = -50; i < 50; i++) {
+		for (var j = -50; j < 50; j++) {
+			var grass = new THREE.Mesh(grass_geometry, grass_mat);
+			grass.position.x = i * randomInteger(1,20);
+			grass.position.y = 1;
+			grass.position.z = j * randomInteger(1,20);
+			scene.add(grass);
+			//objects.push(grass);
+
+		}
+	}
+	
+
 
 	//Initalize WebGL renderer and attributes 
 	renderer = new THREE.WebGLRenderer();
