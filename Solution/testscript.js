@@ -1,6 +1,7 @@
 
 
 var mazeArray;
+var locationx, locationz;
 var camera, scene, renderer;
 var grass_geometry, geometry, material, mesh;
 var controls;
@@ -147,6 +148,9 @@ function init() {
 				break;
 			case 80:
 				removeSolution();
+				break;
+			case 72:
+				showHint(locationx, locationz);
 				break;
 			case 32: // space
 				if (canJump === true) {
@@ -607,6 +611,10 @@ function checkCollision() {
 }
 
 
+function showHint(locationx, locationz) {
+
+}
+
 function lookAheadAndRender(locationx, locationz) {
 	geometry = new THREE.BoxGeometry(20, 40, 20);
 	const texture = new THREE.TextureLoader().load('brick.jpg');
@@ -665,8 +673,8 @@ function animate() {
 		velocity.z -= velocity.z * 10.0 * delta;
 		velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
 		
-		//var locationx = Math.abs(Math.round(camera.position.x / 20));
-		//var locationz = Math.abs(Math.round(camera.position.z / 20));
+		locationx = Math.abs(Math.round(camera.position.x / 20));
+		locationz = Math.abs(Math.round(camera.position.z / 20));
 		//lookAheadAndRender(locationx, locationz);
 		
 		
