@@ -471,12 +471,6 @@ function init() {
 	}
 
 
-	//////////////////////////////////////////////////////////////
-	
-	////////////////////////////////////////////////////////////////
-
-
-
 	//FLOOR
 	//Geometry for floor plane 
 	geometry = new THREE.PlaneGeometry(20000, 20000, 500, 500);
@@ -565,8 +559,8 @@ function init() {
 	
 
 
-	for (var i = -50; i < 50; i++) {
-		for (var j = -50; j < 50; j++) {
+	for (var i = -20; i < 40; i++) {
+		for (var j = -20; j < 40; j++) {
 			var grass = new THREE.Mesh(grass_geometry, grass_mat);
 			grass.position.x = i * randomInteger(1,20);
 			grass.position.y = 1;
