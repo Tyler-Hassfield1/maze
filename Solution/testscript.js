@@ -144,9 +144,15 @@ function init() {
 				} else {
 					fly = true;
 				}
+				break;
+			case 16: // shift
+				if (fly) {
+					camera.position.y = camera.position.y - 10;
+				}
+				break;
 			case 32: // space
 				if (fly) {
-					camera.position.y++;
+					camera.position.y = camera.position.y + 10;
 				} else {
 					if (canJump === true) {
 						velocity.y += 200;
@@ -541,7 +547,7 @@ function init() {
 
 
 
-	
+	/**
 	grass_geometry = new THREE.BoxGeometry(2, 4, 2);
 
 	//const grass_texture = new THREE.TextureLoader().load('images/grass01.png');
@@ -567,7 +573,7 @@ function init() {
 		}
 	}
 	
-
+	*/
 
 	//Initalize WebGL renderer and attributes 
 	renderer = new THREE.WebGLRenderer();
