@@ -665,12 +665,15 @@ function animate() {
 		var time = performance.now();
 		//Set velocity of user 
 		var delta = (time - prevTime) / 1000;
-		velocity.x -= velocity.x * 10.0 * delta;
-		velocity.z -= velocity.z * 10.0 * delta;
-
+		var gamma = (time - prevTime) / 10000;
 		if (!fly) {
 			velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
-		} 
+			velocity.x -= velocity.x * 10.0 * delta;
+			velocity.z -= velocity.z * 10.0 * delta;
+		} else {
+			velocity.x -= velocity.x * 10.0 * gamma;
+			velocity.z -= velocity.z * 10.0 * gamma;
+        }
 
 		locationx = Math.abs(Math.round(camera.position.x / 20));
 		locationz = Math.abs(Math.round(camera.position.z / 20));
