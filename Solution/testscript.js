@@ -86,14 +86,14 @@ var moveRight = false;
 var canJump = false;
 var prevTime = performance.now();
 var velocity = new THREE.Vector3();
-
+var fly = false;
 
 
 
 function init() {
 	//Create camera, scene, and light source
 	camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 1, 1000);
-	camera.rotation.y = 80;
+	camera.rotation.y = 800;
 	scene = new THREE.Scene();
 
 	//scene.fog = new THREE.Fog(0xffffff, 0, 750);
@@ -107,20 +107,6 @@ function init() {
 
 	scene.add(controls.getObject());
 	
-
-	var skyGeo = new THREE.SphereGeometry(100000, 25, 25);
-
-	var loader = new THREE.TextureLoader(),
-		texture1 = loader.load("universe.jpg");
-
-	var material = new THREE.MeshPhongMaterial({
-		map: texture1,
-	});
-
-	var sky = new THREE.Mesh(skyGeo, material);
-	sky.material.side = THREE.BackSide;
-	scene.add(sky);
-
 
 
 
@@ -152,11 +138,20 @@ function init() {
 			case 72:
 				showHint(locationx, locationz);
 				break;
-			case 32: // space
-				if (canJump === true) {
-					velocity.y += 200;
+			case 70:
+				if (fly) {
+					fly = false;
+				} else {
+					fly = true;
 				}
-				
+			case 32: // space
+				if (fly) {
+					camera.position.y++;
+				} else {
+					if (canJump === true) {
+						velocity.y += 200;
+					}
+				}
 				break;
 		}
 	};
@@ -180,6 +175,8 @@ function init() {
 				break;
 		}
 	};
+
+
 	document.addEventListener('keydown', onKeyDown, false);
 	document.addEventListener('keyup', onKeyUp, false);
 	raycaster = new THREE.Raycaster(new THREE.Vector3(), new THREE.Vector3(0, - 1, 0), 0, 10);
@@ -566,7 +563,6 @@ function init() {
 			grass.position.y = 1;
 			grass.position.z = j * randomInteger(1,20);
 			scene.add(grass);
-			//objects.push(grass);
 
 		}
 	}
@@ -665,8 +661,11 @@ function animate() {
 		var delta = (time - prevTime) / 1000;
 		velocity.x -= velocity.x * 10.0 * delta;
 		velocity.z -= velocity.z * 10.0 * delta;
-		velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
-		
+
+		if (!fly) {
+			velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
+		} 
+
 		locationx = Math.abs(Math.round(camera.position.x / 20));
 		locationz = Math.abs(Math.round(camera.position.z / 20));
 		//lookAheadAndRender(locationx, locationz);
