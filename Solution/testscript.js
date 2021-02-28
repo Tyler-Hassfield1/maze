@@ -10,6 +10,7 @@ var collisionX1 = [];
 var collisionX2 = [];
 var collisionZ1 = [];
 var collisionZ2 = [];
+var collisionY = [];
 var raycaster;
 var blocker = document.getElementById('blocker');
 var instructions = document.getElementById('instructions');
@@ -537,6 +538,7 @@ function init() {
 				collisionX2[index] = mesh.position.x - 12;
 				collisionZ1[index] = mesh.position.z + 12;
 				collisionZ2[index] = mesh.position.z - 12;
+				collisionY[index] = mesh.position.y + 40;
 				index++;
 				scene.add(mesh);
 				objects.push(mesh);
@@ -600,6 +602,7 @@ function checkCollision() {
 	for (var i = 0; i < collisionX1.length; i++) {
 		if (camera.position.x < collisionX1[i] && camera.position.x > collisionX2[i]) {
 			if (camera.position.z < collisionZ1[i] && camera.position.z > collisionZ2[i]) {
+				if (camera.position.y < collisionY[i])
 				return true;
             }
         }
