@@ -155,7 +155,7 @@ function init() {
 				if (fly) {
 					camera.position.y = camera.position.y + 10;
 				} else {
-					if (canJump === true) {
+					if (canJump === true && camera.position.y < 12) {
 						velocity.y += 200;
 					}
 				}
@@ -600,9 +600,9 @@ function onWindowResize() {
 //Determines if a collision exists, if so return true
 function checkCollision() {
 	for (var i = 0; i < collisionX1.length; i++) {
-		if (camera.position.x < collisionX1[i] && camera.position.x > collisionX2[i]) {
-			if (camera.position.z < collisionZ1[i] && camera.position.z > collisionZ2[i]) {
-				if (camera.position.y < collisionY[i])
+		if (camera.position.x <= collisionX1[i] && camera.position.x >= collisionX2[i]) {
+			if (camera.position.z <= collisionZ1[i] && camera.position.z >= collisionZ2[i]) {
+				if (camera.position.y <= collisionY[i])
 				return true;
             }
         }
@@ -685,7 +685,7 @@ function animate() {
 		
 		if (moveForward) {
 			if (checkCollision()) {
-				velocity.z += 100;
+				velocity.z += 10;
 				velocity.x = 0;
 				controls.getObject().translateX(velocity.x * delta);
 				controls.getObject().translateY(velocity.y * delta);
@@ -701,7 +701,7 @@ function animate() {
 			
 		} else if (moveBackward) {
 			if (checkCollision()) {
-				velocity.z -= 100;
+				velocity.z -= 10;
 				velocity.x = 0;
 				controls.getObject().translateX(velocity.x * delta);
 				controls.getObject().translateY(velocity.y * delta);
@@ -716,7 +716,7 @@ function animate() {
 		} else if (moveLeft) {
 			if (checkCollision()) {
 				velocity.z = 0;
-				velocity.x += 100;
+				velocity.x += 10;
 				controls.getObject().translateX(velocity.x * delta);
 				controls.getObject().translateY(velocity.y * delta);
 				controls.getObject().translateZ(velocity.z * delta);
@@ -730,7 +730,7 @@ function animate() {
 		} else if (moveRight) {
 			if (checkCollision()) {
 				velocity.z = 0;
-				velocity.x -= 100;
+				velocity.x -= 10;
 				controls.getObject().translateX(velocity.x * delta);
 				controls.getObject().translateY(velocity.y * delta);
 				controls.getObject().translateZ(velocity.z * delta);
